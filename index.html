@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Weather App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #ffc0cb; /* Light pink background */
+            overflow: hidden;
+        }
+        .container {
+            background: #ff69b4; /* Dark pink tab */
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            color: white;
+            position: relative;
+            width: 350px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .header img {
+            width: 80px;
+            height: 80px;
+            margin-right: 10px;
+        }
+        input {
+            width: 90%;
+            padding: 12px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 1em;
+        }
+        button {
+            padding: 12px 25px;
+            border: none;
+            background: white;
+            color: #ff69b4;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+        button:hover {
+            background: #ffb6c1;
+        }
+        .weather-info {
+            margin-top: 30px;
+            font-size: 1.2em;
+            font-family: 'Times New Roman', Times, serif;
+            animation: fadeIn 2s ease-in-out;
+
+        }
+        .pixel-girl {
+            position: absolute;
+            bottom: -40px;
+            right: -20px;
+            width: 120px;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <img src="https://cdn-icons-png.flaticon.com/512/869/869869.png" alt="Sun icon">
+            <span>YOUR WEATHER APP</span>
+        </div>
+        <input type="text" id="city" placeholder="Enter location cutie!">
+        <button onclick="fetchWeather()">Get Weather</button>
+        <div class="weather-info" id="weather-info"></div>
+        <img class="pixel-girl" src="Untitled design.png" alt="Pixel girl">
+    </div>
+    <script>
+        const API_KEY = "3b92f1565fb94cd695d175845250204";
+
+        function fetchWeather() {
+            const city = document.getElementById("city").value;
+            if (!city) return;
+            
+            fetch(`https://api.weatherapi.com/v1/current.json?key=${API_KEY}&q=${city}`)
+                .then(response => response.json())
+                .then(data => {
+                    const weatherInfo = `
+                        <h2>${data.location.name} 💖</h2>
+                        <p>${data.current.temp_c}°C</p>
+                        <p>${data.current.condition.text}</p>
+                        <img src="${data.current.condition.icon}" alt="weather icon" style="width: 50px;">
+                    `;
+                    const weatherDiv = document.getElementById("weather-info");
+                    weatherDiv.innerHTML = weatherInfo;
+                    weatherDiv.style.animation = "fadeIn 1s ease-in-out";
+                })
+                .catch(error => {
+                    document.getElementById("weather-info").innerHTML = "Oops! Couldn't fetch the weather 🌧️";
+                });
+        }
+    </script>
+</body>
+</html>
